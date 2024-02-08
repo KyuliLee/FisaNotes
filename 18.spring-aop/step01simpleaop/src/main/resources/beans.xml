@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- UserController를 bean으로 등록 -->
+    <bean id="userController" class="dev.syntax.aop.UserController" />
+
+    <!-- Spring에서 갖고 있는 내장 클래스인 ProxyFactoryBean을 bean으로 등록 -->
+    <!-- 실행 시점에서 동적으로 Proxy 객체를 생성해주는 역할 -->
+    <bean id="proxyFactoryBean" class="org.springframework.aop.framework.ProxyFactoryBean">
+
+        <!-- target class : aop를 적용할 클래스. 여기서는 userController -->
+        <property name="target" ref="userController" />
+
+        <!-- 중간에서 동작을 가로채서 수행할 부분 : interceptor -->
+        <property name="interceptorNames">
+            <list>
+                <value>simpleAdvice</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- simpleAdvice 클래스도 bean으로 등록 -->
+    <bean id="simpleAdvice" class="dev.syntax.aop.SimpleAdvice" />
+
+</beans>
